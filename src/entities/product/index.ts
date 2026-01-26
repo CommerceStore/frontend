@@ -8,3 +8,4 @@ export {
   hasDiscount,
 } from './lib';
 export { MOCK_PRODUCTS } from './mock';
+export { fetchProducts, fetchProductById, fetchProductsByCategory } from './api';
