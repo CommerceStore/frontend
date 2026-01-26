@@ -1,5 +1,5 @@
-import { ProductsPage } from '@/pages/products/ProductsPage';
-import './App.css';
+import { ProductsPage } from "@/pages/products/ProductsPage";
+import "./App.css";
 
 function App() {
   return <ProductsPage />;

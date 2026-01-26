@@ -1,6 +1,6 @@
-import { mockApiResponse } from '@/shared/api/mock';
-import { MOCK_PRODUCTS } from './mock';
-import type { Product } from './types';
+import { mockApiResponse } from "@/shared/api/mock";
+import { MOCK_PRODUCTS } from "./mock";
+import type { Product } from "./types";
 
 /**
  * 모든 상품 조회 (Mock)

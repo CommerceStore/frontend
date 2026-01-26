@@ -1,7 +1,7 @@
-import type { ButtonHTMLAttributes, ReactNode } from 'react';
+import type { ButtonHTMLAttributes, ReactNode } from "react";
 
-type ButtonVariant = 'primary' | 'secondary' | 'ghost';
-type ButtonSize = 'sm' | 'md' | 'lg';
+type ButtonVariant = "primary" | "secondary" | "ghost";
+type ButtonSize = "sm" | "md" | "lg";
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: ButtonVariant;
@@ -12,24 +12,24 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 const variantStyles: Record<ButtonVariant, string> = {
   primary:
-    'bg-primary-600 text-white hover:bg-primary-700 focus:ring-primary-600 disabled:bg-zinc-300 disabled:text-zinc-500',
+    "bg-primary-600 text-white hover:bg-primary-700 focus:ring-primary-600 disabled:bg-zinc-300 disabled:text-zinc-500",
   secondary:
-    'bg-white text-zinc-900 border border-zinc-300 hover:bg-zinc-50 focus:ring-zinc-500 disabled:bg-zinc-100 disabled:text-zinc-400 disabled:border-zinc-200',
+    "bg-white text-zinc-900 border border-zinc-300 hover:bg-zinc-50 focus:ring-zinc-500 disabled:bg-zinc-100 disabled:text-zinc-400 disabled:border-zinc-200",
   ghost:
-    'bg-transparent text-zinc-700 hover:bg-zinc-100 focus:ring-zinc-500 disabled:text-zinc-400 disabled:hover:bg-transparent',
+    "bg-transparent text-zinc-700 hover:bg-zinc-100 focus:ring-zinc-500 disabled:text-zinc-400 disabled:hover:bg-transparent",
 };
 
 const sizeStyles: Record<ButtonSize, string> = {
-  sm: 'px-3 py-1.5 text-sm',
-  md: 'px-4 py-2 text-base',
-  lg: 'px-6 py-3 text-lg',
+  sm: "px-3 py-1.5 text-sm",
+  md: "px-4 py-2 text-base",
+  lg: "px-6 py-3 text-lg",
 };
 
 export function Button({
-  variant = 'primary',
-  size = 'md',
+  variant = "primary",
+  size = "md",
   fullWidth = false,
-  className = '',
+  className = "",
   disabled,
   children,
   ...props
@@ -42,7 +42,7 @@ export function Button({
         disabled:cursor-not-allowed
         ${variantStyles[variant]}
         ${sizeStyles[size]}
-        ${fullWidth ? 'w-full' : ''}
+        ${fullWidth ? "w-full" : ""}
         ${className}
       `}
       disabled={disabled}

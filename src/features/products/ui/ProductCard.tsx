@@ -12,7 +12,7 @@ export function ProductCard({ product, onClick }: ProductCardProps) {
   const discountRate = hasDiscount
     ? Math.round(
         ((product.originalPrice! - product.price) / product.originalPrice!) *
-          100,
+          100
       )
     : 0;
 

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState } from "react";
 
 interface SearchBarProps {
   placeholder?: string;
@@ -7,9 +7,9 @@ interface SearchBarProps {
 }
 
 export function SearchBar({
-  placeholder = '상품 검색',
+  placeholder = "상품 검색",
   onSearch,
-  defaultValue = '',
+  defaultValue = "",
 }: SearchBarProps) {
   const [query, setQuery] = useState(defaultValue);
 
@@ -19,8 +19,8 @@ export function SearchBar({
   };
 
   const handleClear = () => {
-    setQuery('');
-    onSearch('');
+    setQuery("");
+    onSearch("");
   };
 
   return (

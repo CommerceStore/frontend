@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import type { ReactNode } from "react";
 
 interface NavbarProps {
   children: ReactNode;
@@ -19,7 +19,10 @@ export function Navbar({ children }: NavbarProps) {
 export function NavbarBrand({ children }: { children: ReactNode }) {
   return (
     <div className="flex items-center">
-      <a href="/" className="text-xl font-bold text-zinc-900 hover:text-primary-600 transition-colors">
+      <a
+        href="/"
+        className="text-xl font-bold text-zinc-900 hover:text-primary-600 transition-colors"
+      >
         {children}
       </a>
     </div>
@@ -50,7 +53,7 @@ export function NavbarIconButton({
       {icon}
       {badge !== undefined && badge > 0 && (
         <span className="absolute -right-1 -top-1 flex h-5 min-w-[1.25rem] items-center justify-center rounded-full bg-primary-600 px-1 text-xs font-bold text-white">
-          {badge > 99 ? '99+' : badge}
+          {badge > 99 ? "99+" : badge}
         </span>
       )}
     </button>

@@ -24,7 +24,9 @@ export function EmptyState({ message, description }: EmptyStateProps) {
       </div>
       <div>
         <p className="text-base font-medium text-gray-900">{message}</p>
-        {description && <p className="mt-1 text-sm text-gray-600">{description}</p>}
+        {description && (
+          <p className="mt-1 text-sm text-gray-600">{description}</p>
+        )}
       </div>
     </div>
   );

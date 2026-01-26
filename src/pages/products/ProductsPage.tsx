@@ -36,7 +36,7 @@ export function ProductsPage() {
       filtered = filtered.filter(
         (p) =>
           p.name.toLowerCase().includes(query) ||
-          p.description.toLowerCase().includes(query),
+          p.description.toLowerCase().includes(query)
       );
     }
 
@@ -46,7 +46,7 @@ export function ProductsPage() {
       case "newest":
         sorted.sort(
           (a, b) =>
-            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
         );
         break;
       case "popularity":
@@ -64,7 +64,7 @@ export function ProductsPage() {
     return sorted;
   }, [products, selectedCategory, searchQuery, sortOption]);
 
-  const handleProductClick = (_productId: string) => {
+  const handleProductClick = () => {
     // 다음 단계에서 상세 페이지 라우팅 구현 예정
   };
 

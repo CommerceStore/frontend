@@ -1,4 +1,4 @@
-export type { Product, ProductStatus } from './types';
+export type { Product, ProductStatus } from "./types";
 export {
   formatPrice,
   calculateDiscountRate,
@@ -6,6 +6,10 @@ export {
   getStockStatus,
   isProductAvailable,
   hasDiscount,
-} from './lib';
-export { MOCK_PRODUCTS } from './mock';
-export { fetchProducts, fetchProductById, fetchProductsByCategory } from './api';
+} from "./lib";
+export { MOCK_PRODUCTS } from "./mock";
+export {
+  fetchProducts,
+  fetchProductById,
+  fetchProductsByCategory,
+} from "./api";

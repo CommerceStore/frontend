@@ -1,9 +1,9 @@
-import { useQuery } from '@tanstack/react-query';
-import { fetchProducts } from '@/entities/product/api';
+import { useQuery } from "@tanstack/react-query";
+import { fetchProducts } from "@/entities/product/api";
 
 export function useProductsQuery() {
   return useQuery({
-    queryKey: ['products'],
+    queryKey: ["products"],
     queryFn: fetchProducts,
   });
 }

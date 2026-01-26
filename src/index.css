@@ -1,8 +1,11 @@
-@import 'tailwindcss';
+@import "tailwindcss";
 
 @layer base {
   body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Pretendard Variable', Pretendard, Roboto, 'Noto Sans KR', 'Segoe UI', 'Malgun Gothic', sans-serif;
+    font-family:
+      -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo",
+      "Pretendard Variable", Pretendard, Roboto, "Noto Sans KR", "Segoe UI",
+      "Malgun Gothic", sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
