@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useProductsQuery } from "@/features/products/api/useProductsQuery";
 import { ProductsGrid } from "@/features/products/ui/ProductsGrid";
 import { ErrorMessage } from "@/shared/ui/ErrorMessage";
@@ -11,6 +12,7 @@ import { MainBanner } from "@/widgets/ui/MainBanner";
 import type { SortOption } from "@/entities/product/types";
 
 export function ProductsPage() {
+  const navigate = useNavigate();
   const { data: products, isLoading, error, refetch } = useProductsQuery();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
@@ -64,8 +66,8 @@ export function ProductsPage() {
     return sorted;
   }, [products, selectedCategory, searchQuery, sortOption]);
 
-  const handleProductClick = () => {
-    // 다음 단계에서 상세 페이지 라우팅 구현 예정
+  const handleProductClick = (productId: string) => {
+    navigate(`/products/${productId}`);
   };
 
   const handleSearch = (query: string) => {
