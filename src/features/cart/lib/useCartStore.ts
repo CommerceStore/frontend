@@ -8,7 +8,6 @@ import {
   removeFromCart as removeFromCartHelper,
   clearCart as clearCartHelper,
   calculateCartTotal,
-  calculateCartItemCount,
 } from "@/entities/cart";
 
 interface CartStore {
@@ -18,7 +17,6 @@ interface CartStore {
   removeItem: (productId: string) => void;
   clearCart: () => void;
   getTotal: () => number;
-  getItemCount: () => number;
 }
 
 const INITIAL_CART: Cart = {
@@ -55,10 +53,6 @@ export const useCartStore = create<CartStore>()(
 
       getTotal: () => {
         return calculateCartTotal(get().cart);
-      },
-
-      getItemCount: () => {
-        return calculateCartItemCount(get().cart);
       },
     }),
     {
