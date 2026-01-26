@@ -1,5 +1,3 @@
-export type ProductStatus = 'available' | 'out_of_stock' | 'discontinued';
-
 export interface Product {
   id: string;
   name: string;
@@ -7,9 +5,10 @@ export interface Product {
   price: number;
   originalPrice?: number; // 할인 전 가격
   stock: number;
-  status: ProductStatus;
   imageUrl: string;
   category: string;
   createdAt: string;
   updatedAt: string;
 }
+
+export type SortOption = "newest" | "popularity" | "price-low" | "price-high";
