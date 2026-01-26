@@ -1,4 +1,4 @@
-import type { Product, ProductStatus } from "../types";
+import type { Product } from "../types";
 
 /**
  * 가격을 원화 형식으로 포맷팅
@@ -29,19 +29,17 @@ export function calculateDiscountAmount(
 }
 
 /**
- * 상품의 재고 상태 판단
+ * 재고 여부 확인
  */
-export function getStockStatus(product: Product): ProductStatus {
-  if (product.status === "discontinued") return "discontinued";
-  if (product.stock <= 0) return "out_of_stock";
-  return "available";
+export function isInStock(product: Product): boolean {
+  return product.stock > 0;
 }
 
 /**
  * 상품이 구매 가능한지 확인
  */
 export function isProductAvailable(product: Product): boolean {
-  return product.status === "available" && product.stock > 0;
+  return product.stock > 0;
 }
 
 /**

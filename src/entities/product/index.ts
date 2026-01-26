@@ -1,9 +1,9 @@
-export type { Product, ProductStatus } from "./types";
+export type { Product } from "./types";
 export {
   formatPrice,
   calculateDiscountRate,
   calculateDiscountAmount,
-  getStockStatus,
+  isInStock,
   isProductAvailable,
   hasDiscount,
 } from "./lib";
