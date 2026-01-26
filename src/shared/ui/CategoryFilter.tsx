@@ -10,11 +10,11 @@ export function CategoryFilter({
   onCategoryChange,
 }: CategoryFilterProps) {
   return (
-    <div className="flex justify-start gap-8 overflow-x-auto border-b border-zinc-200">
+    <div className="flex justify-start gap-4 overflow-x-auto border-b border-zinc-200 pb-1">
       <button
         onClick={() => onCategoryChange(null)}
         className={`
-          relative whitespace-nowrap pb-4 text-base font-medium transition-colors
+          relative whitespace-nowrap px-4 py-3 text-lg font-semibold transition-colors
           ${
             selectedCategory === null
               ? "text-zinc-900"
@@ -24,7 +24,7 @@ export function CategoryFilter({
       >
         전체
         {selectedCategory === null && (
-          <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-zinc-900 transition-all duration-300" />
+          <span className="absolute bottom-0 left-0 right-0 h-1 bg-zinc-900 transition-all duration-300" />
         )}
       </button>
       {categories.map((category) => (
@@ -32,7 +32,7 @@ export function CategoryFilter({
           key={category}
           onClick={() => onCategoryChange(category)}
           className={`
-            relative whitespace-nowrap pb-4 text-base font-medium transition-colors
+            relative whitespace-nowrap px-4 py-3 text-lg font-semibold transition-colors
             ${
               selectedCategory === category
                 ? "text-zinc-900"
@@ -42,7 +42,7 @@ export function CategoryFilter({
         >
           {category}
           {selectedCategory === category && (
-            <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-zinc-900 transition-all duration-300" />
+            <span className="absolute bottom-0 left-0 right-0 h-1 bg-zinc-900 transition-all duration-300" />
           )}
         </button>
       ))}

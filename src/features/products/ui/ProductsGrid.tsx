@@ -1,5 +1,5 @@
-import type { Product } from '@/entities/product/types';
-import { ProductCard } from './ProductCard';
+import type { Product } from "@/entities/product/types";
+import { ProductCard } from "./ProductCard";
 
 interface ProductsGridProps {
   products: Product[];
@@ -8,7 +8,7 @@ interface ProductsGridProps {
 
 export function ProductsGrid({ products, onProductClick }: ProductsGridProps) {
   return (
-    <div className="grid grid-cols-3 gap-3 md:grid-cols-4 md:gap-6">
+    <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 md:gap-6">
       {products.map((product) => (
         <ProductCard
           key={product.id}

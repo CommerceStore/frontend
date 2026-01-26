@@ -16,8 +16,8 @@ export function ProductCard({ product, onClick }: ProductCardProps) {
       )
     : 0;
 
-  const isOutOfStock = product.status === "out_of_stock";
-  const isDiscontinued = product.status === "discontinued";
+  const isOutOfStock = product.stock === 0;
+  const isLowStock = product.stock > 0 && product.stock <= 10;
 
   return (
     <article
@@ -26,7 +26,7 @@ export function ProductCard({ product, onClick }: ProductCardProps) {
         group cursor-pointer overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-sm
         transition-all hover:border-zinc-300 hover:shadow-md
         focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-600 focus-visible:ring-offset-2
-        ${isOutOfStock || isDiscontinued ? "opacity-60" : ""}
+        ${isOutOfStock ? "opacity-60" : ""}
       `}
       tabIndex={0}
       onKeyDown={(e) => {
@@ -50,25 +50,37 @@ export function ProductCard({ product, onClick }: ProductCardProps) {
             {discountRate}%
           </Badge>
         )}
+        {isLowStock && !isOutOfStock && (
+          <Badge
+            variant="default"
+            className="absolute right-2 top-2 bg-orange-500 text-white"
+          >
+            품절임박
+          </Badge>
+        )}
         {isOutOfStock && (
           <div className="absolute inset-0 flex items-center justify-center bg-black/50">
             <Badge variant="soldout">품절</Badge>
           </div>
         )}
-        {isDiscontinued && (
-          <div className="absolute inset-0 flex items-center justify-center bg-black/50">
-            <Badge variant="soldout">단종</Badge>
-          </div>
-        )}
       </div>
 
       <div className="space-y-2 p-4">
-        <h3 className="line-clamp-2 min-h-14 text-lg font-bold text-zinc-900">
+        <div className="mb-2">
+          <Badge
+            variant="default"
+            className="bg-zinc-100 text-zinc-700 text-xs"
+          >
+            {product.category}
+          </Badge>
+        </div>
+
+        <h3 className="line-clamp-2 min-h-12 text-base font-semibold text-zinc-900">
           {product.name}
         </h3>
 
         <div className="flex items-baseline gap-2">
-          <span className="text-lg font-semibold text-zinc-900">
+          <span className="text-xl font-bold text-zinc-900">
             {product.price.toLocaleString()}원
           </span>
           {hasDiscount && (
@@ -78,13 +90,11 @@ export function ProductCard({ product, onClick }: ProductCardProps) {
           )}
         </div>
 
-        {product.stock > 0 &&
-          product.stock <= 10 &&
-          product.status === "available" && (
-            <p className="text-xs text-orange-600">
-              재고 {product.stock}개 남음
-            </p>
-          )}
+        {isLowStock && !isOutOfStock && (
+          <p className="text-xs font-medium text-orange-600">
+            재고 {product.stock}개 남음
+          </p>
+        )}
       </div>
     </article>
   );
