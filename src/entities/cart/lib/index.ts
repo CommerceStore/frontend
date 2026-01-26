@@ -114,3 +114,34 @@ export function clearCart(): Cart {
     updatedAt: new Date().toISOString(),
   };
 }
+
+/**
+ * 장바구니 할인 금액 계산
+ */
+export function calculateCartDiscount(cart: Cart): number {
+  return cart.items.reduce((discount, item) => {
+    const { product, quantity } = item;
+    if (product.originalPrice && product.originalPrice > product.price) {
+      const itemDiscount = (product.originalPrice - product.price) * quantity;
+      return discount + itemDiscount;
+    }
+    return discount;
+  }, 0);
+}
+
+/**
+ * 배송비 계산
+ */
+export function calculateShippingFee(subtotal: number): number {
+  const FREE_SHIPPING_THRESHOLD = 0;
+  return subtotal >= FREE_SHIPPING_THRESHOLD ? 0 : 3000;
+}
+
+/**
+ * 최종 결제 금액 계산 (상품 금액 + 배송비)
+ */
+export function calculateFinalTotal(cart: Cart): number {
+  const subtotal = calculateCartTotal(cart);
+  const shipping = calculateShippingFee(subtotal);
+  return subtotal + shipping;
+}
