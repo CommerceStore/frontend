@@ -1,5 +1,5 @@
-import { NavbarIconButton } from '@/shared/ui/Navbar';
-import { SearchBar } from '@/shared/ui/SearchBar';
+import { NavbarIconButton } from "@/shared/ui/Navbar";
+import { SearchBar } from "@/shared/ui/SearchBar";
 
 interface HeaderProps {
   onSearch: (query: string) => void;

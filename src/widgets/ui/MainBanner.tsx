@@ -18,12 +18,12 @@ export function MainBanner() {
         }`}
         onLoad={() => setIsLoaded(true)}
       />
-      <div className="absolute inset-0 flex flex-col justify-center bg-black/20 p-8 md:p-12">
+      <div className="absolute inset-0 flex flex-col justify-center bg-black/30 p-8 md:p-12">
         <h2 className="mb-2 text-3xl font-bold text-white shadow-sm md:text-5xl">
-          Spring Grand Sale
+          2026 설 명절 선물세트
         </h2>
         <p className="text-lg font-medium text-white/90 shadow-sm md:text-xl">
-          최대 50% 할인 혜택을 만나보세요
+          정성스럽게 준비한 프리미엄 답례품과 단체선물
         </p>
       </div>
     </div>
