@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import type { ShippingAddress } from "@/entities/order/types";
-import { validateShippingField, validateShippingForm } from "./validation";
+import { validateShippingField, validateShippingForm } from "../lib/validation";
 
 interface UseShippingFormOptions {
   onSubmit: (data: ShippingAddress) => void;
+  showValidationError?: boolean;
 }
 
 interface UseShippingFormReturn {
@@ -24,10 +25,31 @@ const INITIAL_FORM_DATA: ShippingAddress = {
   deliveryRequest: "",
 };
 
-export function useShippingForm({ onSubmit }: UseShippingFormOptions): UseShippingFormReturn {
+export function useShippingForm({ onSubmit, showValidationError = false }: UseShippingFormOptions): UseShippingFormReturn {
   const [formData, setFormData] = useState<ShippingAddress>(INITIAL_FORM_DATA);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [touched, setTouched] = useState<Record<string, boolean>>({});
+
+  useEffect(() => {
+    if (showValidationError) {
+      const requiredFields: Array<keyof ShippingAddress> = [
+        "recipientName",
+        "phone",
+        "zipCode",
+        "address",
+        "addressDetail",
+      ];
+
+      const newErrors = validateShippingForm(formData, requiredFields);
+      setErrors(newErrors);
+      setTouched(
+        requiredFields.reduce(
+          (acc, field) => ({ ...acc, [field]: true }),
+          {}
+        )
+      );
+    }
+  }, [showValidationError, formData]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;

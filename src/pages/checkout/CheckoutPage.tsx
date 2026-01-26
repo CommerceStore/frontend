@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Layout } from "@/widgets/layout/Layout";
 import { useCartStore } from "@/features/cart";
@@ -7,31 +7,21 @@ import { OrderSummary } from "@/features/checkout/ui/OrderSummary";
 import { Button } from "@/shared/ui/Button";
 import { Toast, ToastContainer } from "@/shared/ui/Toast";
 import { calculateShippingFee } from "@/entities/cart";
-import type { ShippingAddress } from "@/entities/order/types";
-
-type ToastType = "success" | "error" | "info";
-
-interface ToastState {
-  show: boolean;
-  message: string;
-  type: ToastType;
-}
+import { useCheckout } from "@/features/checkout/hooks/useCheckout";
 
 export function CheckoutPage() {
   const navigate = useNavigate();
   const cart = useCartStore((state) => state.cart);
-  const clearCart = useCartStore((state) => state.clearCart);
   const getTotal = useCartStore((state) => state.getTotal);
 
-  const [isProcessing, setIsProcessing] = useState(false);
-  const [toast, setToast] = useState<ToastState>({
-    show: false,
-    message: "",
-    type: "info",
-  });
-
-  const formRef = useRef<{ submit: () => void }>(null);
-  const shippingFormDataRef = useRef<ShippingAddress | null>(null);
+  const {
+    showValidationError,
+    isProcessing,
+    toast,
+    handleShippingSubmit,
+    handlePayment,
+    closeToast,
+  } = useCheckout();
 
   const subtotal = getTotal();
   const shipping = calculateShippingFee(subtotal);
@@ -44,51 +34,6 @@ export function CheckoutPage() {
     }
   }, [cart.items.length, navigate]);
 
-  const handleShippingSubmit = (address: ShippingAddress) => {
-    shippingFormDataRef.current = address;
-  };
-
-  const showToast = (message: string, type: ToastType) => {
-    setToast({ show: true, message, type });
-  };
-
-  const handlePayment = async () => {
-    if (!shippingFormDataRef.current) {
-      const formElement = document.querySelector("form");
-      if (formElement) {
-        const submitEvent = new Event("submit", { bubbles: true, cancelable: true });
-        formElement.dispatchEvent(submitEvent);
-      }
-      return;
-    }
-
-    setIsProcessing(true);
-
-    try {
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-
-      const isSuccess = Math.random() > 0.3;
-
-      if (isSuccess) {
-        showToast("주문이 완료되었습니다", "success");
-        clearCart();
-
-        setTimeout(() => {
-          navigate("/");
-        }, 2000);
-      } else {
-        throw new Error("결제 처리 중 오류가 발생했습니다");
-      }
-    } catch (error) {
-      showToast(
-        error instanceof Error ? error.message : "결제에 실패했습니다. 다시 시도해주세요.",
-        "error"
-      );
-    } finally {
-      setIsProcessing(false);
-    }
-  };
-
   if (cart.items.length === 0) {
     return null;
   }
@@ -100,7 +45,11 @@ export function CheckoutPage() {
 
         <div className="grid gap-8 lg:grid-cols-3">
           <div className="lg:col-span-2">
-            <ShippingForm onSubmit={handleShippingSubmit} disabled={isProcessing} />
+            <ShippingForm
+              onSubmit={handleShippingSubmit}
+              disabled={isProcessing}
+              showValidationError={showValidationError}
+            />
           </div>
 
           <div className="lg:col-span-1">
@@ -119,7 +68,9 @@ export function CheckoutPage() {
                 disabled={isProcessing}
                 className="w-full"
               >
-                {isProcessing ? "처리 중..." : `${total.toLocaleString()}원 결제하기`}
+                {isProcessing
+                  ? "처리 중..."
+                  : `${total.toLocaleString()}원 결제하기`}
               </Button>
 
               <div className="rounded-lg border border-zinc-200 bg-zinc-50 p-4">
@@ -142,7 +93,7 @@ export function CheckoutPage() {
           <Toast
             message={toast.message}
             type={toast.type}
-            onClose={() => setToast((prev) => ({ ...prev, show: false }))}
+            onClose={closeToast}
           />
         )}
       </ToastContainer>

@@ -1,15 +1,17 @@
 import { Input } from "@/shared/ui/Input";
 import type { ShippingAddress } from "@/entities/order/types";
-import { useShippingForm } from "../lib/useShippingForm";
+import { useShippingForm } from "../hooks/useShippingForm";
 
 interface ShippingFormProps {
   onSubmit: (address: ShippingAddress) => void;
   disabled?: boolean;
+  showValidationError?: boolean;
 }
 
-export function ShippingForm({ onSubmit, disabled = false }: ShippingFormProps) {
+export function ShippingForm({ onSubmit, disabled = false, showValidationError = false }: ShippingFormProps) {
   const { formData, errors, touched, handleChange, handleBlur, handleSubmit } = useShippingForm({
     onSubmit,
+    showValidationError,
   });
 
   return (
@@ -101,10 +103,6 @@ export function ShippingForm({ onSubmit, disabled = false }: ShippingFormProps) 
           </div>
         </div>
       </div>
-
-      <button type="submit" className="hidden">
-        제출
-      </button>
     </form>
   );
 }

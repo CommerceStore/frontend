@@ -20,7 +20,7 @@ export function OrderSummary({ items, subtotal, shipping, total }: OrderSummaryP
           <div key={item.product.id} className="flex gap-3 pb-3 border-b border-zinc-100 last:border-0">
             <div className="h-16 w-16 flex-shrink-0 overflow-hidden rounded-md border border-zinc-200 bg-zinc-50">
               <img
-                src={item.product.image}
+                src={item.product.imageUrl}
                 alt={item.product.name}
                 className="h-full w-full object-cover"
               />
