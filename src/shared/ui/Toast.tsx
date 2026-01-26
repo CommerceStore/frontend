@@ -27,7 +27,7 @@ const typeStyles: Record<ToastType, { bg: string; border: string; icon: string }
   },
 };
 
-const icons: Record<ToastType, JSX.Element> = {
+const icons: Record<ToastType, React.ReactElement> = {
   success: (
     <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
       <path
