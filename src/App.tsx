@@ -1,7 +1,8 @@
+import { ProductsPage } from "@/pages/products/ProductsPage";
 import "./App.css";
 
 function App() {
-  return <></>;
+  return <ProductsPage />;
 }
 
 export default App;

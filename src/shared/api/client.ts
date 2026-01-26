@@ -44,7 +44,7 @@ interface ClientConfig {
 /**
  * Request options for API calls
  */
-interface RequestOptions extends Omit<RequestInit, 'method' | 'body'> {
+interface RequestOptions extends Omit<RequestInit, "method" | "body"> {
   params?: Record<string, string | number | boolean>;
 }
 
@@ -70,11 +70,11 @@ interface ApiClient {
  * Create a fetch wrapper with base configuration
  */
 function createClient(config: ClientConfig = {}): ApiClient {
-  const { baseURL = '', headers: defaultHeaders = {} } = config;
+  const { baseURL = "", headers: defaultHeaders = {} } = config;
 
   async function request<T>(
     endpoint: string,
-    options: RequestOptionsWithBody & { method: string } = { method: 'GET' }
+    options: RequestOptionsWithBody & { method: string } = { method: "GET" }
   ): Promise<T> {
     const { method, body, params, ...restOptions } = options;
 
@@ -88,7 +88,7 @@ function createClient(config: ClientConfig = {}): ApiClient {
     }
 
     const headers = {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
       ...defaultHeaders,
       ...restOptions.headers,
     };
@@ -104,7 +104,7 @@ function createClient(config: ClientConfig = {}): ApiClient {
       // Handle non-OK responses
       if (!response.ok) {
         const error: ApiError = {
-          message: response.statusText || 'Request failed',
+          message: response.statusText || "Request failed",
           status: response.status,
         };
 
@@ -121,7 +121,10 @@ function createClient(config: ClientConfig = {}): ApiClient {
       }
 
       // Handle empty responses (204 No Content, etc.)
-      if (response.status === 204 || response.headers.get('content-length') === '0') {
+      if (
+        response.status === 204 ||
+        response.headers.get("content-length") === "0"
+      ) {
         return {} as T;
       }
 
@@ -136,8 +139,8 @@ function createClient(config: ClientConfig = {}): ApiClient {
 
       // Network or other errors
       const error: ApiError = {
-        message: err instanceof Error ? err.message : 'Unknown error occurred',
-        code: 'NETWORK_ERROR',
+        message: err instanceof Error ? err.message : "Unknown error occurred",
+        code: "NETWORK_ERROR",
       };
       throw error;
     }
@@ -145,19 +148,19 @@ function createClient(config: ClientConfig = {}): ApiClient {
 
   return {
     get: <T>(endpoint: string, options?: RequestOptions) =>
-      request<T>(endpoint, { ...options, method: 'GET' }),
+      request<T>(endpoint, { ...options, method: "GET" }),
 
     post: <T>(endpoint: string, options?: RequestOptionsWithBody) =>
-      request<T>(endpoint, { ...options, method: 'POST' }),
+      request<T>(endpoint, { ...options, method: "POST" }),
 
     put: <T>(endpoint: string, options?: RequestOptionsWithBody) =>
-      request<T>(endpoint, { ...options, method: 'PUT' }),
+      request<T>(endpoint, { ...options, method: "PUT" }),
 
     patch: <T>(endpoint: string, options?: RequestOptionsWithBody) =>
-      request<T>(endpoint, { ...options, method: 'PATCH' }),
+      request<T>(endpoint, { ...options, method: "PATCH" }),
 
     delete: <T>(endpoint: string, options?: RequestOptionsWithBody) =>
-      request<T>(endpoint, { ...options, method: 'DELETE' }),
+      request<T>(endpoint, { ...options, method: "DELETE" }),
   };
 }
 
@@ -166,10 +169,10 @@ function createClient(config: ClientConfig = {}): ApiClient {
  */
 function isApiError(error: unknown): error is ApiError {
   return (
-    typeof error === 'object' &&
+    typeof error === "object" &&
     error !== null &&
-    'message' in error &&
-    typeof (error as ApiError).message === 'string'
+    "message" in error &&
+    typeof (error as ApiError).message === "string"
   );
 }
 
@@ -178,7 +181,7 @@ function isApiError(error: unknown): error is ApiError {
  * Configure baseURL via environment variable or config
  */
 export const api = createClient({
-  baseURL: import.meta.env.VITE_API_BASE_URL || '',
+  baseURL: import.meta.env.VITE_API_BASE_URL || "",
 });
 
 /**

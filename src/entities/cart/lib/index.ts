@@ -1,5 +1,5 @@
-import type { Cart, CartItem } from '../types';
-import type { Product } from '../../product/types';
+import type { Cart, CartItem } from "../types";
+import type { Product } from "../../product/types";
 
 /**
  * 장바구니 아이템의 소계 계산
@@ -27,7 +27,10 @@ export function calculateCartItemCount(cart: Cart): number {
 /**
  * 장바구니에서 특정 상품 찾기
  */
-export function findCartItem(cart: Cart, productId: string): CartItem | undefined {
+export function findCartItem(
+  cart: Cart,
+  productId: string
+): CartItem | undefined {
   return cart.items.find((item) => item.product.id === productId);
 }
 

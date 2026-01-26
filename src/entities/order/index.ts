@@ -1,4 +1,4 @@
-export type { Order, OrderItem, OrderStatus, ShippingAddress } from './types';
+export type { Order, OrderItem, OrderStatus, ShippingAddress } from "./types";
 export {
   calculateOrderItemSubtotal,
   calculateOrderSubtotal,
@@ -8,4 +8,4 @@ export {
   getOrderStatusText,
   canCancelOrder,
   isOrderCompleted,
-} from './lib';
+} from "./lib";

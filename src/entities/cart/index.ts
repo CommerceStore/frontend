@@ -1,4 +1,4 @@
-export type { Cart, CartItem } from './types';
+export type { Cart, CartItem } from "./types";
 export {
   calculateItemSubtotal,
   calculateCartTotal,
@@ -9,4 +9,4 @@ export {
   updateCartItemQuantity,
   removeFromCart,
   clearCart,
-} from './lib';
+} from "./lib";
