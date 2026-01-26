@@ -1,129 +1,16 @@
-import { useState } from "react";
 import { Input } from "@/shared/ui/Input";
 import type { ShippingAddress } from "@/entities/order/types";
+import { useShippingForm } from "../lib/useShippingForm";
 
 interface ShippingFormProps {
   onSubmit: (address: ShippingAddress) => void;
   disabled?: boolean;
 }
 
-interface FormErrors {
-  recipientName?: string;
-  phone?: string;
-  zipCode?: string;
-  address?: string;
-  addressDetail?: string;
-}
-
-const VALIDATION_RULES = {
-  recipientName: {
-    required: "받는 분 이름을 입력해주세요",
-    minLength: { value: 2, message: "이름은 2자 이상 입력해주세요" },
-  },
-  phone: {
-    required: "연락처를 입력해주세요",
-    pattern: {
-      value: /^01[0-9]-?[0-9]{3,4}-?[0-9]{4}$/,
-      message: "올바른 휴대폰 번호 형식이 아닙니다 (예: 010-1234-5678)",
-    },
-  },
-  zipCode: {
-    required: "우편번호를 입력해주세요",
-    pattern: {
-      value: /^\d{5}$/,
-      message: "우편번호는 5자리 숫자입니다 (예: 12345)",
-    },
-  },
-  address: {
-    required: "주소를 입력해주세요",
-    minLength: { value: 5, message: "주소를 정확히 입력해주세요" },
-  },
-  addressDetail: {
-    required: "상세 주소를 입력해주세요",
-  },
-};
-
 export function ShippingForm({ onSubmit, disabled = false }: ShippingFormProps) {
-  const [formData, setFormData] = useState<ShippingAddress>({
-    recipientName: "",
-    phone: "",
-    zipCode: "",
-    address: "",
-    addressDetail: "",
-    deliveryRequest: "",
+  const { formData, errors, touched, handleChange, handleBlur, handleSubmit } = useShippingForm({
+    onSubmit,
   });
-
-  const [errors, setErrors] = useState<FormErrors>({});
-  const [touched, setTouched] = useState<Record<string, boolean>>({});
-
-  const validateField = (name: keyof ShippingAddress, value: string): string | undefined => {
-    const rules = VALIDATION_RULES[name as keyof typeof VALIDATION_RULES];
-    if (!rules) return undefined;
-
-    if (rules.required && !value.trim()) {
-      return rules.required;
-    }
-
-    if (rules.minLength && value.length < rules.minLength.value) {
-      return rules.minLength.message;
-    }
-
-    if (rules.pattern && !rules.pattern.value.test(value)) {
-      return rules.pattern.message;
-    }
-
-    return undefined;
-  };
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-
-    if (touched[name]) {
-      const error = validateField(name as keyof ShippingAddress, value);
-      setErrors((prev) => ({ ...prev, [name]: error }));
-    }
-  };
-
-  const handleBlur = (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setTouched((prev) => ({ ...prev, [name]: true }));
-
-    const error = validateField(name as keyof ShippingAddress, value);
-    setErrors((prev) => ({ ...prev, [name]: error }));
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-
-    const newErrors: FormErrors = {};
-    const requiredFields: Array<keyof ShippingAddress> = [
-      "recipientName",
-      "phone",
-      "zipCode",
-      "address",
-      "addressDetail",
-    ];
-
-    requiredFields.forEach((field) => {
-      const error = validateField(field, formData[field] as string);
-      if (error) {
-        newErrors[field] = error;
-      }
-    });
-
-    setErrors(newErrors);
-    setTouched(
-      requiredFields.reduce(
-        (acc, field) => ({ ...acc, [field]: true }),
-        {}
-      )
-    );
-
-    if (Object.keys(newErrors).length === 0) {
-      onSubmit(formData);
-    }
-  };
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
