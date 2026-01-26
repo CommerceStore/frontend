@@ -84,6 +84,16 @@ src/
 - Normalize errors to a single shape: `{ message: string; status?: number; code?: string }`.
 - API functions return typed data only (no raw Response objects).
 
+## No-AI-Footprint Policy
+
+- Do not include any AI/tool attribution anywhere (code, comments, docs, commits, PRs).
+- Never add Git trailer lines such as:
+  - `Co-Authored-By: Claude ...`
+  - `Co-Authored-By: ChatGPT ...`
+  - `Generated-By: ...`
+- Commit messages must be short, human, and purely technical (no meta text).
+- Comments must explain only intent/constraints ("why") and avoid meta references.
+
 ## Coding Rules
 
 - No secrets in code. Keep `.env.example` updated.
