@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import { NavbarIconButton } from "@/shared/ui/Navbar";
 import { SearchBar } from "@/shared/ui/SearchBar";
 
@@ -7,8 +8,10 @@ interface HeaderProps {
 }
 
 export function Header({ onSearch, cartItemCount = 0 }: HeaderProps) {
+  const navigate = useNavigate();
+
   const handleCartClick = () => {
-    // 장바구니 페이지로 이동 (다음 단계에서 구현)
+    navigate("/cart");
   };
 
   return (

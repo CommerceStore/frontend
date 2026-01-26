@@ -9,6 +9,7 @@ import { CategoryFilter } from "@/shared/ui/CategoryFilter";
 import { SortFilter } from "@/shared/ui/SortFilter";
 import { Layout } from "@/widgets/layout/Layout";
 import { MainBanner } from "@/widgets/ui/MainBanner";
+import { useCartStore } from "@/features/cart";
 import type { SortOption } from "@/entities/product/types";
 
 export function ProductsPage() {
@@ -17,6 +18,7 @@ export function ProductsPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [sortOption, setSortOption] = useState<SortOption>("newest");
+  const cartItemCount = useCartStore((state) => state.cart.items.length);
 
   const categories = useMemo(() => {
     if (!products) return [];
@@ -75,7 +77,7 @@ export function ProductsPage() {
   };
 
   return (
-    <Layout onSearch={handleSearch} cartItemCount={0}>
+    <Layout onSearch={handleSearch} cartItemCount={cartItemCount}>
       <div className="min-h-screen bg-zinc-50">
         <div className="mx-auto max-w-7xl px-4 py-6 md:py-8">
           <MainBanner />
