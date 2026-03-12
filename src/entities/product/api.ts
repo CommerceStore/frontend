@@ -1,28 +1,39 @@
-import { mockApiResponse } from "@/shared/api/mock";
-import { MOCK_PRODUCTS } from "./mock";
+import { api } from "@/shared/api/client";
 import type { Product } from "./types";
 
-/**
- * 모든 상품 조회 (Mock)
- */
-export async function fetchProducts(): Promise<Product[]> {
-  return mockApiResponse(MOCK_PRODUCTS);
+export interface ProductsParams {
+  category?: string;
+  sort?: "price_asc" | "price_desc" | "latest";
+  search?: string;
+  page?: number;
+  limit?: number;
 }
 
-/**
- * 특정 상품 조회 (Mock)
- */
-export async function fetchProductById(id: string): Promise<Product | null> {
-  const product = MOCK_PRODUCTS.find((p) => p.id === id);
-  return mockApiResponse(product ?? null);
+interface ProductListResponse {
+  data: Product[];
+  total: number;
+  page: number;
+  limit: number;
 }
 
-/**
- * 카테고리별 상품 조회 (Mock)
- */
-export async function fetchProductsByCategory(
-  category: string
+interface ProductResponse {
+  data: Product;
+}
+
+export async function fetchProducts(
+  params?: ProductsParams
 ): Promise<Product[]> {
-  const products = MOCK_PRODUCTS.filter((p) => p.category === category);
-  return mockApiResponse(products);
+  const res = await api.get<ProductListResponse>("/products", {
+    params: params as Record<string, string | number | boolean | undefined>,
+  });
+  return res.data;
+}
+
+export async function fetchProductById(id: string): Promise<Product | null> {
+  try {
+    const res = await api.get<ProductResponse>(`/products/${id}`);
+    return res.data;
+  } catch {
+    return null;
+  }
 }

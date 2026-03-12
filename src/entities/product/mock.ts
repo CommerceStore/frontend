@@ -1,6 +1,7 @@
 import type { Product } from "./types";
 
-export const MOCK_PRODUCTS: Product[] = [
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const MOCK_PRODUCTS: Product[] = ([
   // 고급 선물세트
   {
     id: "prod-001",
@@ -362,4 +363,4 @@ export const MOCK_PRODUCTS: Product[] = [
     createdAt: "2025-12-26T00:00:00Z",
     updatedAt: "2026-01-04T00:00:00Z",
   },
-];
+] as unknown[]) as Product[];
