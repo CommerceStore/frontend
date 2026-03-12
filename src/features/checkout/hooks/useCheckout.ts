@@ -1,7 +1,11 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useCartStore } from "@/features/cart";
-import type { ShippingAddress } from "@/entities/order/types";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { api } from "@/shared/api/client";
+import type { ApiError } from "@/shared/api/client";
+import { cartQueryKey } from "@/features/cart/api/useCartQuery";
+import type { ShippingAddress, Order } from "@/entities/order/types";
+import type { Cart } from "@/entities/cart/types";
 
 type ToastType = "success" | "error" | "info";
 
@@ -17,17 +21,16 @@ interface UseCheckoutReturn {
   isProcessing: boolean;
   toast: ToastState;
   handleShippingSubmit: (address: ShippingAddress) => void;
-  handlePayment: () => Promise<void>;
+  handlePayment: (cart: Cart) => void;
   closeToast: () => void;
 }
 
 export function useCheckout(): UseCheckoutReturn {
   const navigate = useNavigate();
-  const clearCart = useCartStore((state) => state.clearCart);
+  const queryClient = useQueryClient();
 
   const [shippingData, setShippingData] = useState<ShippingAddress | null>(null);
   const [showValidationError, setShowValidationError] = useState(false);
-  const [isProcessing, setIsProcessing] = useState(false);
   const [toast, setToast] = useState<ToastState>({
     show: false,
     message: "",
@@ -47,46 +50,50 @@ export function useCheckout(): UseCheckoutReturn {
     setShowValidationError(false);
   };
 
-  const handlePayment = async () => {
+  const orderMutation = useMutation({
+    mutationFn: ({
+      items,
+      shippingAddress,
+    }: {
+      items: { productId: string; quantity: number }[];
+      shippingAddress: ShippingAddress;
+    }) =>
+      api.post<{ data: Order }>("/orders", {
+        body: { items, shippingAddress },
+      }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: cartQueryKey });
+      showToast("주문이 완료되었습니다", "success");
+      setTimeout(() => navigate("/"), 2000);
+    },
+    onError: (err: unknown) => {
+      const apiErr = err as ApiError;
+      showToast(
+        apiErr.message || "주문에 실패했습니다. 다시 시도해주세요.",
+        "error"
+      );
+    },
+  });
+
+  const handlePayment = (cart: Cart) => {
     if (!shippingData) {
       setShowValidationError(true);
       showToast("배송지 정보를 입력해주세요", "error");
       return;
     }
 
-    setIsProcessing(true);
+    const items = cart.items.map((item) => ({
+      productId: item.product.id,
+      quantity: item.quantity,
+    }));
 
-    try {
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-
-      const isSuccess = Math.random() > 0.3;
-
-      if (isSuccess) {
-        showToast("주문이 완료되었습니다", "success");
-        clearCart();
-
-        setTimeout(() => {
-          navigate("/");
-        }, 2000);
-      } else {
-        throw new Error("결제 처리 중 오류가 발생했습니다");
-      }
-    } catch (error) {
-      showToast(
-        error instanceof Error
-          ? error.message
-          : "결제에 실패했습니다. 다시 시도해주세요.",
-        "error"
-      );
-    } finally {
-      setIsProcessing(false);
-    }
+    orderMutation.mutate({ items, shippingAddress: shippingData });
   };
 
   return {
     shippingData,
     showValidationError,
-    isProcessing,
+    isProcessing: orderMutation.isPending,
     toast,
     handleShippingSubmit,
     handlePayment,

@@ -9,7 +9,7 @@ import { CategoryFilter } from "@/shared/ui/CategoryFilter";
 import { SortFilter } from "@/shared/ui/SortFilter";
 import { Layout } from "@/widgets/layout/Layout";
 import { MainBanner } from "@/widgets/ui/MainBanner";
-import { useCartStore } from "@/features/cart";
+import { useCartQuery } from "@/features/cart";
 import type { SortOption } from "@/entities/product/types";
 
 export function ProductsPage() {
@@ -18,7 +18,9 @@ export function ProductsPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [sortOption, setSortOption] = useState<SortOption>("newest");
-  const cartItemCount = useCartStore((state) => state.cart.items.length);
+
+  const { data: cart } = useCartQuery();
+  const cartItemCount = cart?.items.length ?? 0;
 
   const categories = useMemo(() => {
     if (!products) return [];
@@ -44,7 +46,6 @@ export function ProductsPage() {
       );
     }
 
-    // 정렬 적용
     const sorted = [...filtered];
     switch (sortOption) {
       case "newest":
@@ -54,7 +55,6 @@ export function ProductsPage() {
         );
         break;
       case "popularity":
-        // 실제로는 API에서 인기도를 받아와야 하지만, 여기서는 재고가 많은 순으로 정렬
         sorted.sort((a, b) => b.stock - a.stock);
         break;
       case "price-low":
@@ -72,12 +72,8 @@ export function ProductsPage() {
     navigate(`/products/${productId}`);
   };
 
-  const handleSearch = (query: string) => {
-    setSearchQuery(query);
-  };
-
   return (
-    <Layout onSearch={handleSearch} cartItemCount={cartItemCount}>
+    <Layout onSearch={setSearchQuery} cartItemCount={cartItemCount}>
       <div className="min-h-screen bg-zinc-50">
         <div className="mx-auto max-w-7xl px-4 py-6 md:py-8">
           <MainBanner />

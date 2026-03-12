@@ -5,23 +5,41 @@ import { Layout } from "@/widgets/layout/Layout";
 import { ErrorMessage } from "@/shared/ui/ErrorMessage";
 import { EmptyState } from "@/shared/ui/EmptyState";
 import { LoadingSpinner } from "@/shared/ui/LoadingSpinner";
-import { useCartStore } from "@/features/cart";
+import { useAuthStore } from "@/features/auth/store/useAuthStore";
+import { useCartQuery, useAddCartItemMutation } from "@/features/cart";
 
 export function ProductDetailPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { data: product, isLoading, error, refetch } = useProductQuery(id!);
-  const addToCart = useCartStore((state) => state.addToCart);
-  const cartItemCount = useCartStore((state) => state.cart.items.length);
+
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
+  const { data: cart } = useCartQuery();
+  const addCartItemMutation = useAddCartItemMutation();
+  const cartItemCount = cart?.items.length ?? 0;
 
   const handleAddToCart = (quantity: number) => {
     if (!product) return;
-    addToCart(product, quantity);
-    alert(`${product.name} ${quantity}개를 장바구니에 추가했습니다`);
+    if (!isAuthenticated) {
+      navigate("/login");
+      return;
+    }
+    addCartItemMutation.mutate(
+      { productId: product.id, quantity },
+      { onSuccess: () => navigate("/cart") }
+    );
   };
 
   const handleBuyNow = (quantity: number) => {
-    alert(`${quantity}개 바로 구매 기능은 준비 중입니다`);
+    if (!isAuthenticated) {
+      navigate("/login");
+      return;
+    }
+    if (!product) return;
+    addCartItemMutation.mutate(
+      { productId: product.id, quantity },
+      { onSuccess: () => navigate("/checkout") }
+    );
   };
 
   return (

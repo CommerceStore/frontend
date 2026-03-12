@@ -1,3 +1,13 @@
+export type ProductCategory =
+  | "ELECTRONICS"
+  | "FASHION"
+  | "BEAUTY"
+  | "FOOD"
+  | "SPORTS"
+  | "HOME"
+  | "BOOKS"
+  | "KIDS";
+
 export interface Product {
   id: string;
   name: string;
@@ -6,7 +16,7 @@ export interface Product {
   originalPrice?: number; // 할인 전 가격
   stock: number;
   imageUrl: string;
-  category: string;
+  category: ProductCategory;
   createdAt: string;
   updatedAt: string;
 }

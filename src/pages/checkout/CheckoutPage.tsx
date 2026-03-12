@@ -1,18 +1,18 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Layout } from "@/widgets/layout/Layout";
-import { useCartStore } from "@/features/cart";
+import { useCartQuery } from "@/features/cart";
 import { ShippingForm } from "@/features/checkout/ui/ShippingForm";
 import { OrderSummary } from "@/features/checkout/ui/OrderSummary";
 import { Button } from "@/shared/ui/Button";
 import { Toast, ToastContainer } from "@/shared/ui/Toast";
-import { calculateShippingFee } from "@/entities/cart";
+import { LoadingSpinner } from "@/shared/ui/LoadingSpinner";
+import { calculateCartTotal, calculateShippingFee } from "@/entities/cart";
 import { useCheckout } from "@/features/checkout/hooks/useCheckout";
 
 export function CheckoutPage() {
   const navigate = useNavigate();
-  const cart = useCartStore((state) => state.cart);
-  const getTotal = useCartStore((state) => state.getTotal);
+  const { data: cart, isLoading } = useCartQuery();
 
   const {
     showValidationError,
@@ -23,23 +23,33 @@ export function CheckoutPage() {
     closeToast,
   } = useCheckout();
 
-  const subtotal = getTotal();
+  const items = cart?.items ?? [];
+  const subtotal = cart ? calculateCartTotal(cart) : 0;
   const shipping = calculateShippingFee(subtotal);
   const total = subtotal + shipping;
-  const cartItemCount = cart.items.length;
 
   useEffect(() => {
-    if (cart.items.length === 0) {
+    if (!isLoading && items.length === 0) {
       navigate("/cart");
     }
-  }, [cart.items.length, navigate]);
+  }, [isLoading, items.length, navigate]);
 
-  if (cart.items.length === 0) {
+  if (isLoading) {
+    return (
+      <Layout onSearch={() => {}} cartItemCount={0}>
+        <div className="flex min-h-[60vh] items-center justify-center">
+          <LoadingSpinner />
+        </div>
+      </Layout>
+    );
+  }
+
+  if (items.length === 0) {
     return null;
   }
 
   return (
-    <Layout onSearch={() => {}} cartItemCount={cartItemCount}>
+    <Layout onSearch={() => {}} cartItemCount={items.length}>
       <div className="mx-auto max-w-7xl px-4 py-8">
         <h1 className="mb-8 text-3xl font-bold text-zinc-900">주문/결제</h1>
 
@@ -55,7 +65,7 @@ export function CheckoutPage() {
           <div className="lg:col-span-1">
             <div className="sticky top-24 space-y-4">
               <OrderSummary
-                items={cart.items}
+                items={items}
                 subtotal={subtotal}
                 shipping={shipping}
                 total={total}
@@ -64,7 +74,7 @@ export function CheckoutPage() {
               <Button
                 variant="primary"
                 size="lg"
-                onClick={handlePayment}
+                onClick={() => cart && handlePayment(cart)}
                 disabled={isProcessing}
                 className="w-full"
               >
@@ -72,17 +82,6 @@ export function CheckoutPage() {
                   ? "처리 중..."
                   : `${total.toLocaleString()}원 결제하기`}
               </Button>
-
-              <div className="rounded-lg border border-zinc-200 bg-zinc-50 p-4">
-                <h3 className="mb-2 text-sm font-semibold text-zinc-900">
-                  결제 정보 안내
-                </h3>
-                <ul className="space-y-1 text-xs text-zinc-600">
-                  <li>• 실제 결제는 연동되지 않았습니다</li>
-                  <li>• 주문 완료 시 장바구니가 초기화됩니다</li>
-                  <li>• 70% 확률로 성공, 30% 확률로 실패합니다</li>
-                </ul>
-              </div>
             </div>
           </div>
         </div>

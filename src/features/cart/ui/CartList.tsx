@@ -4,8 +4,8 @@ import { EmptyState } from "@/shared/ui/EmptyState";
 
 interface CartListProps {
   items: CartItemType[];
-  onUpdateQuantity: (productId: string, quantity: number) => void;
-  onRemove: (productId: string) => void;
+  onUpdateQuantity: (itemId: string, quantity: number) => void;
+  onRemove: (itemId: string) => void;
 }
 
 export function CartList({ items, onUpdateQuantity, onRemove }: CartListProps) {
