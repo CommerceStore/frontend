@@ -5,14 +5,19 @@ import { Layout } from "@/widgets/layout/Layout";
 import { ErrorMessage } from "@/shared/ui/ErrorMessage";
 import { EmptyState } from "@/shared/ui/EmptyState";
 import { LoadingSpinner } from "@/shared/ui/LoadingSpinner";
+import { useCartStore } from "@/features/cart";
 
 export function ProductDetailPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { data: product, isLoading, error, refetch } = useProductQuery(id!);
+  const addToCart = useCartStore((state) => state.addToCart);
+  const cartItemCount = useCartStore((state) => state.cart.items.length);
 
   const handleAddToCart = (quantity: number) => {
-    alert(`${quantity}개를 장바구니에 추가했습니다`);
+    if (!product) return;
+    addToCart(product, quantity);
+    alert(`${product.name} ${quantity}개를 장바구니에 추가했습니다`);
   };
 
   const handleBuyNow = (quantity: number) => {
@@ -20,7 +25,7 @@ export function ProductDetailPage() {
   };
 
   return (
-    <Layout onSearch={() => {}} cartItemCount={0}>
+    <Layout onSearch={() => {}} cartItemCount={cartItemCount}>
       <div className="min-h-screen bg-white">
         <div className="mx-auto max-w-7xl px-4 py-4">
           <button
