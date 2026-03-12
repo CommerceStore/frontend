@@ -3,8 +3,8 @@ import { calculateItemSubtotal } from "@/entities/cart";
 
 interface CartItemProps {
   item: CartItemType;
-  onUpdateQuantity: (productId: string, quantity: number) => void;
-  onRemove: (productId: string) => void;
+  onUpdateQuantity: (itemId: string, quantity: number) => void;
+  onRemove: (itemId: string) => void;
 }
 
 export function CartItem({ item, onUpdateQuantity, onRemove }: CartItemProps) {
@@ -15,18 +15,18 @@ export function CartItem({ item, onUpdateQuantity, onRemove }: CartItemProps) {
 
   const handleDecrement = () => {
     if (quantity > 1) {
-      onUpdateQuantity(product.id, quantity - 1);
+      onUpdateQuantity(item.id, quantity - 1);
     }
   };
 
   const handleIncrement = () => {
     if (quantity < maxQuantity) {
-      onUpdateQuantity(product.id, quantity + 1);
+      onUpdateQuantity(item.id, quantity + 1);
     }
   };
 
   const handleRemove = () => {
-    onRemove(product.id);
+    onRemove(item.id);
   };
 
   return (

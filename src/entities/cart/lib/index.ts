@@ -66,6 +66,7 @@ export function addToCart(
     items: [
       ...cart.items,
       {
+        id: "",
         product,
         quantity,
         addedAt: new Date().toISOString(),
