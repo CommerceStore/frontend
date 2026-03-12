@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import { useCartStore } from "@/features/cart";
 import { CartList } from "@/features/cart";
 import { CartSummary } from "@/features/cart";
@@ -5,6 +6,7 @@ import { Layout } from "@/widgets/layout/Layout";
 import { calculateShippingFee } from "@/entities/cart";
 
 export function CartPage() {
+  const navigate = useNavigate();
   const cart = useCartStore((state) => state.cart);
   const updateQuantity = useCartStore((state) => state.updateQuantity);
   const removeItem = useCartStore((state) => state.removeItem);
@@ -16,7 +18,7 @@ export function CartPage() {
   const cartItemCount = cart.items.length;
 
   const handleCheckout = () => {
-    alert("주문 기능은 준비 중입니다.");
+    navigate("/checkout");
   };
 
   const isEmpty = cart.items.length === 0;

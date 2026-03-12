@@ -40,12 +40,14 @@ src/
 - Under `src/features/*`, use the following subfolders as needed:
   - ui/
   - api/
+  - hooks/
   - utils/
   - lib/
   - types/
 - Default rule:
   - `ui/` = presentational components only
   - `api/` = TanStack Query hooks + local API functions + local DTO/types
+  - `hooks/` = business logic hooks (no UI)
   - `types/` = shared feature-level types (only if reused across multiple files)
   - `lib/` = domain/logic helpers for the feature (no UI)
   - `utils/` = feature-scoped helpers (prefer `shared/lib` if truly generic)
